@@ -46,6 +46,35 @@ exports.createStudent = async (req, res) => {
   }
 };
 
+exports.getStudentInfo = async (req, res) => {
+  if (!req.student) {
+    return res.json({ success: false, message: "unauthorized access!" });
+  }
+
+  const student = await Student.findOne({ nisn: req.query.nisn }).populate({
+    path: "classroom",
+    populate: {
+      path: "homeroomteacher",
+    },
+  });
+
+  if (!student)
+    return res.json({
+      success: false,
+      message: "student not found, with the given username",
+    });
+
+  const studentInfo = {
+    fullname: student.fullname,
+    nisn: student.nisn,
+    classroom: student.classroom,
+    presence: student.presence,
+    avatar: student.avatar ? student.avatar : "",
+  };
+
+  return res.json({ success: true, student: studentInfo });
+};
+
 exports.studentSignIn = async (req, res) => {
   const { nisn, password } = req.body;
   const student = await Student.findOne({ nisn }).populate({

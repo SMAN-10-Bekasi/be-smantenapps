@@ -6,6 +6,7 @@ const studentRouter = require("./routes/student");
 const Student = require("./models/student");
 const Teacher = require("./models/teacher");
 const Classroom = require("./models/classroom");
+const Qrcode = require("./models/qrcode");
 
 const app = express();
 

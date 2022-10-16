@@ -1,7 +1,11 @@
 const express = require("express");
-
 const router = express.Router();
-const { createStudent, studentSignIn } = require("../controllers/student");
+const { getQrcode } = require("../controllers/qrcode");
+const {
+  createStudent,
+  studentSignIn,
+  getStudentInfo,
+} = require("../controllers/student");
 const { isAuth } = require("../middleware/auth");
 const {
   validateStudentSignIn,
@@ -22,33 +26,8 @@ router.post("/create-post", isAuth, (req, res) => {
   res.send("private bro");
 });
 
-router.get("/get-student", isAuth, async (req, res) => {
-  if (!req.student) {
-    return res.json({ success: false, message: "unauthorized access!" });
-  }
+router.get("/get-student", isAuth, getStudentInfo);
 
-  const student = await Student.findOne({ nisn: req.query.nisn }).populate({
-    path: "classroom",
-    populate: {
-      path: "homeroomteacher",
-    },
-  });
-
-  if (!student)
-    return res.json({
-      success: false,
-      message: "student not found, with the given username",
-    });
-
-  const studentInfo = {
-    fullname: student.fullname,
-    nisn: student.nisn,
-    classroom: student.classroom,
-    presence: student.presence,
-    avatar: student.avatar ? student.avatar : "",
-  };
-
-  return res.json({ success: true, student: studentInfo });
-});
+router.get("/get-qrcode", isAuth, getQrcode);
 
 module.exports = router;
