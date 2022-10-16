@@ -10,15 +10,18 @@ const {
 const Student = require("../models/student");
 
 router.post("/create-student", createStudent);
+
 router.post(
   "/sign-in",
   validateStudentSignIn,
   studentValidation,
   studentSignIn
 );
+
 router.post("/create-post", isAuth, (req, res) => {
   res.send("private bro");
 });
+
 router.get("/get-student", isAuth, async (req, res) => {
   if (!req.student) {
     return res.json({ success: false, message: "unauthorized access!" });
@@ -31,10 +34,17 @@ router.get("/get-student", isAuth, async (req, res) => {
     },
   });
 
+  if (!student)
+    return res.json({
+      success: false,
+      message: "student not found, with the given username",
+    });
+
   const studentInfo = {
     fullname: student.fullname,
     nisn: student.nisn,
     classroom: student.classroom,
+    presence: student.presence,
     avatar: student.avatar ? student.avatar : "",
   };
 
