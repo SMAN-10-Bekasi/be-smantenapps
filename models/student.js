@@ -1,52 +1,38 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const studentSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-    required: true,
+const presenceSchema = new mongoose.Schema(
+  {
+    desc: String,
   },
-  nisn: {
-    type: String,
-    required: true,
-    unique: true,
+  { timestamps: true }
+);
+
+const studentSchema = new mongoose.Schema(
+  {
+    fullname: { type: String, required: true },
+    nisn: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    classroom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Classroom",
+      required: true,
+    },
+    presence: [presenceSchema],
+    gender: { type: String, required: true },
+    religion: { type: String, required: true },
+    phonenumber: { type: String, required: true },
+    birthdate: { type: String, required: true },
+    address: { type: String, required: true },
+    avatar: Buffer,
+    fathername: String,
+    fatherphonenumber: String,
+    mothername: String,
+    motherphonenumber: String,
+    parentaddress: String,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  classroom: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "classes",
-    required: true,
-  },
-  gender: {
-    type: String,
-    required: true,
-  },
-  religion: {
-    type: String,
-    required: true,
-  },
-  phonenumber: {
-    type: String,
-    required: true,
-  },
-  birthdate: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  avatar: Buffer,
-  fathername: String,
-  fatherphonenumber: String,
-  mothername: String,
-  motherphonenumber: String,
-  parentaddress: String,
-});
+  { collection: "students" }
+);
 
 studentSchema.pre("save", function (next) {
   if (this.isModified("password")) {

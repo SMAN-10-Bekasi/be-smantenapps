@@ -7,6 +7,7 @@ exports.createStudent = async (req, res) => {
     nisn,
     password,
     classroom,
+    presence,
     gender,
     religion,
     phonenumber,
@@ -25,6 +26,7 @@ exports.createStudent = async (req, res) => {
       nisn,
       password,
       classroom,
+      presence,
       gender,
       religion,
       phonenumber,
@@ -46,7 +48,12 @@ exports.createStudent = async (req, res) => {
 
 exports.studentSignIn = async (req, res) => {
   const { nisn, password } = req.body;
-  const student = await Student.findOne({ nisn });
+  const student = await Student.findOne({ nisn }).populate({
+    path: "classroom",
+    populate: {
+      path: "homeroomteacher",
+    },
+  });
 
   if (!student)
     return res.json({
@@ -69,6 +76,7 @@ exports.studentSignIn = async (req, res) => {
   const studentInfo = {
     fullname: student.fullname,
     nisn: student.nisn,
+    classroom: student.classroom,
     avatar: student.avatar ? student.avatar : "",
   };
 
