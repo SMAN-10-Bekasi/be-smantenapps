@@ -24,7 +24,7 @@ const studentSchema = new mongoose.Schema(
     phonenumber: { type: String, required: true },
     birthdate: { type: String, required: true },
     address: { type: String, required: true },
-    avatar: Buffer,
+    avatar: String,
     fathername: String,
     fatherphonenumber: String,
     mothername: String,
