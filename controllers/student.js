@@ -1,6 +1,7 @@
 const Student = require("../models/student");
 
 const jwt = require("jsonwebtoken");
+const { validateQrcode } = require("./qrcode");
 exports.createStudent = async (req, res) => {
   const {
     fullname,
@@ -8,6 +9,7 @@ exports.createStudent = async (req, res) => {
     password,
     classroom,
     presence,
+    isPresentToday,
     gender,
     religion,
     phonenumber,
@@ -27,6 +29,7 @@ exports.createStudent = async (req, res) => {
       password,
       classroom,
       presence,
+      isPresentToday,
       gender,
       religion,
       phonenumber,
@@ -110,4 +113,40 @@ exports.studentSignIn = async (req, res) => {
   };
 
   res.json({ success: true, student: studentInfo, token });
+};
+
+exports.studentPresent = async (req, res) => {
+  const { nisn, qrcode } = req.body;
+
+  if (!req.student) {
+    return res.json({ success: false, message: "unauthorized access!" });
+  }
+
+  const student = await Student.findOne({ nisn: nisn }).populate({
+    path: "classroom",
+    populate: {
+      path: "homeroomteacher",
+    },
+  });
+
+  if (!student)
+    return res.json({
+      success: false,
+      message: "student not found, with the given username",
+    });
+
+  const checkQrcode = await validateQrcode(qrcode);
+
+  if (!checkQrcode.success) return res.json(checkQrcode);
+
+  const updatePresence = await Student.updateOne(
+    { nisn: nisn },
+    { $push: { presence: { desc: "present" } } }
+  );
+
+  return res.json({
+    ...updatePresence,
+    success: true,
+    message: "Student successfully present today.",
+  });
 };

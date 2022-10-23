@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const isPresentTodaySchema = new mongoose.Schema({
+  in: { type: Boolean, required: true },
+  out: { type: Boolean, required: true },
+});
+
 const presenceSchema = new mongoose.Schema(
   {
     desc: String,
@@ -19,11 +24,12 @@ const studentSchema = new mongoose.Schema(
       required: true,
     },
     presence: [presenceSchema],
-    gender: { type: String, required: true },
-    religion: { type: String, required: true },
-    phonenumber: { type: String, required: true },
-    birthdate: { type: String, required: true },
-    address: { type: String, required: true },
+    isPresentToday: isPresentTodaySchema,
+    gender: String,
+    religion: String,
+    phonenumber: String,
+    birthdate: String,
+    address: String,
     avatar: String,
     fathername: String,
     fatherphonenumber: String,

@@ -5,6 +5,7 @@ const {
   createStudent,
   studentSignIn,
   getStudentInfo,
+  studentPresent,
 } = require("../controllers/student");
 const { isAuth } = require("../middleware/auth");
 const {
@@ -26,8 +27,8 @@ router.post("/create-post", isAuth, (req, res) => {
   res.send("private bro");
 });
 
-router.get("/get-student", isAuth, getStudentInfo);
+router.post("/student-present", isAuth, studentPresent);
 
-router.get("/get-qrcode", isAuth, getQrcode);
+router.get("/get-student", isAuth, getStudentInfo);
 
 module.exports = router;
