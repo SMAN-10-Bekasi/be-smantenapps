@@ -5,7 +5,7 @@ exports.validateQrcode = async (qrcodeInput) => {
   if (qrcode.qrcode != qrcodeInput)
     return {
       success: false,
-      message: "Qrcode doesn't match!",
+      message: "Qrcode tidak cocok!",
     };
 
   return {

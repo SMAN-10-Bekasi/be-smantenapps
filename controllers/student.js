@@ -140,7 +140,7 @@ exports.studentPresent = async (req, res) => {
   if (!checkQrcode.success) return res.json(checkQrcode);
 
   if (student.isPresentToday.in)
-    return res.json({ success: false, message: "Already present today!" });
+    return res.json({ success: false, message: "Kamu sudah absen hari ini!" });
 
   const updatePresence = await Student.updateOne(
     { nisn: nisn },
