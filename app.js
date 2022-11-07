@@ -20,6 +20,6 @@ app.get("/", (req, res) => {
   res.send("<h1>Halo kamu mau ngapain?</h1>");
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`Rest API is listening at http://localhost:${port}..`);
 });
