@@ -72,6 +72,7 @@ exports.getStudentInfo = async (req, res) => {
     nisn: student.nisn,
     classroom: student.classroom,
     presence: student.presence,
+    motherphonenumber: student.motherphonenumber,
     avatar: student.avatar ? student.avatar : "",
   };
 
