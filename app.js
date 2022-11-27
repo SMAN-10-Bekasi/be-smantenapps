@@ -3,6 +3,7 @@ require("dotenv").config();
 require("./models/db");
 const studentRouter = require("./routes/student");
 const developerRouter = require("./routes/developer");
+const adminRouter = require("./routes/admin");
 
 const Student = require("./models/student");
 const Teacher = require("./models/teacher");
@@ -15,6 +16,7 @@ const port = 8000;
 app.use(express.json());
 app.use(studentRouter);
 app.use(developerRouter);
+app.use(adminRouter);
 
 app.get("/", (req, res) => {
   res.send("<h1>Halo kamu mau ngapain?</h1>");

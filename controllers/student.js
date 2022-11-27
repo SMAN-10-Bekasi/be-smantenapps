@@ -6,6 +6,7 @@ exports.createStudent = async (req, res) => {
   const {
     fullname,
     nisn,
+    nis,
     password,
     classroom,
     presence,
@@ -26,6 +27,7 @@ exports.createStudent = async (req, res) => {
     const student = await Student({
       fullname,
       nisn,
+      nis,
       password,
       classroom,
       presence,
@@ -53,13 +55,18 @@ exports.getStudentInfo = async (req, res) => {
   if (!req.student) {
     return res.json({ success: false, message: "unauthorized access!" });
   }
-
-  const student = await Student.findOne({ nisn: req.query.nisn }).populate({
-    path: "classroom",
-    populate: {
-      path: "homeroomteacher",
-    },
-  });
+  let student;
+  if (req.query.nisn != 0) {
+    student = await Student.findOne({ nisn: req.query.nisn }).populate({
+      path: "classroom",
+      populate: {
+        path: "homeroomteacher",
+      },
+    });
+  } else {
+    student = await Student.find();
+    return res.json({ success: true, students: student });
+  }
 
   if (!student)
     return res.json({
@@ -70,6 +77,7 @@ exports.getStudentInfo = async (req, res) => {
   const studentInfo = {
     fullname: student.fullname,
     nisn: student.nisn,
+    nis: student.nis,
     classroom: student.classroom,
     presence: student.presence,
     motherphonenumber: student.motherphonenumber,
@@ -109,6 +117,7 @@ exports.studentSignIn = async (req, res) => {
   const studentInfo = {
     fullname: student.fullname,
     nisn: student.nisn,
+    nis: student.nis,
     classroom: student.classroom,
     avatar: student.avatar ? student.avatar : "",
   };

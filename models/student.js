@@ -17,6 +17,7 @@ const studentSchema = new mongoose.Schema(
   {
     fullname: { type: String, required: true },
     nisn: { type: String, required: true, unique: true },
+    nis: { type: String, required: true },
     password: { type: String, required: true },
     classroom: {
       type: mongoose.Schema.Types.ObjectId,
